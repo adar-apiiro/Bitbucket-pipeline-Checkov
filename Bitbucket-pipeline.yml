@@ -1,14 +1,15 @@
-checkov: &checkov
-  step:
-    name: Checkov
-    image:
-      name: bridgecrew/checkov:latest
-      entrypoint:
-        - '/usr/bin/env'
-        - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-    script:
-      - checkov -d .
+image: python:3.8
 pipelines:
-    branches:
-      feature/*:
-        - <<: *checkov
+  default:
+    - step:         
+        name: Check Infrastructure Code         
+        script:           
+          - apt-get update && apt-get install -y unzip           
+          - curl -LJO https://github.com/bridgecrewio/checkov/releases/latest/download/checkov_linux_amd64.zip           
+          - unzip checkov_linux_amd64.zip           
+          - chmod +x checkov           
+          - ./checkov -d path/to/your/infrastructure/code --check CKV_AWS_1  
+          
+definitions:   
+  caches:     
+    checkov: /root/.cache/checkov
