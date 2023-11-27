@@ -1,0 +1,22 @@
+image: python:3.8
+
+pipelines:
+  default:
+    - step:
+        name: Build and Test
+        script:
+          - pip install -r requirements.txt
+          - python -m unittest discover
+
+    - step:
+        name: Checkov Misconfigurations
+        script:
+          - pip install checkov
+          # Intentionally adding a placeholder API key for demonstration purposes
+          - echo "API_KEY: placeholder-api-key" >> config.yml
+          - checkov --directory . --quiet
+
+    - step:
+        name: Deploy to Server
+        script:
+          - scp -r ./your-app user@your-server:/path/to/deployment/
