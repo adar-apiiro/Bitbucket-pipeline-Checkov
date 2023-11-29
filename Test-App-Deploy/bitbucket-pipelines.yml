@@ -1,4 +1,4 @@
-image: python:3.8
+image: python:latest
 
 pipelines:
   default:
@@ -7,7 +7,7 @@ pipelines:
         script:
           - pip install -r requirements.txt
           - python -m unittest discover
-
+          
     - step:
         name: Checkov Misconfigurations
         script:
@@ -20,3 +20,4 @@ pipelines:
         name: Deploy to Server
         script:
           - scp -r ./your-app user@your-server:/path/to/deployment/
+
